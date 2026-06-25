@@ -1,3 +1,5 @@
+.github/workflows/
+
 name: Build ZMK firmware
 
 on:
