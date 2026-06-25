@@ -1,0 +1,33 @@
+# This file generates the GitHub Actions build matrix.
+#
+# Three-piece split:
+#   - corne_dongle : BLE CENTRAL, runs the keymap, connects to the PC over USB.
+#   - corne_left   : BLE peripheral (sends key positions to the dongle).
+#   - corne_right  : BLE peripheral (sends key positions to the dongle).
+#
+# Both halves are forced to the peripheral role via cmake-args (the stock
+# corne_left shield is normally the central).
+---
+include:
+  # Left half - BLE peripheral
+  - board: nice_nano_v2
+    shield: corne_left nice_view_adapter nice_view
+    cmake-args: -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
+    artifact-name: corne_left
+
+  # Right half - BLE peripheral
+  - board: nice_nano_v2
+    shield: corne_right nice_view_adapter nice_view
+    cmake-args: -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
+    artifact-name: corne_right
+
+  # Dongle - BLE central + USB
+  - board: nice_nano_v2
+    shield: corne_dongle
+    artifact-name: corne_dongle
+
+  # Flash to ALL THREE boards once before the firmware above, to clear old
+  # Bluetooth bonds so the halves re-pair to the dongle. (See README.)
+  - board: nice_nano_v2
+    shield: settings_reset
+    artifact-name: settings_reset

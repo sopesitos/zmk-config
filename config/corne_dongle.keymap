@@ -1,0 +1,5 @@
+/*
+ * The dongle (central) runs the keymap. Pull in the single shared keymap so the
+ * dongle and the halves never drift -- edit your layers in corne.keymap only.
+ */
+#include "corne.keymap"
